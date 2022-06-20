@@ -6,9 +6,10 @@ const path = require('path')
 const axios = require('axios')
 
 async function downloadImage () {
+  console.log("SAY CHEESE!")
   const url = 'http://69.91.192.220/netcam.jpg'
   const todays_folder = path.resolve(__dirname, 'images', new Date().toISOString().slice(0, 10))
-  const file_path = path.resolve(todays_folder, 'image.jpg')
+  const file_path = path.resolve(todays_folder, `${Date.now()}.jpg`)
   if (!fs.existsSync(todays_folder)) {
     fs.mkdirSync(todays_folder, { recursive: true })
   }
@@ -29,3 +30,4 @@ async function downloadImage () {
 }
 
 downloadImage()
+// setInterval(downloadImage, 1000 * 60) // for dev testing
