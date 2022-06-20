@@ -1,0 +1,10 @@
+[Unit]
+Description=Capture UWB timelapse image once every 5 minutes
+
+[Timer]
+Unit=uwb-timelapse-capture.service
+# Every 5 minutes from 4AM to 11PM PDT
+OnCalendar=04..22:00/5:00 PDT
+
+[Install]
+WantedBy=timers.target

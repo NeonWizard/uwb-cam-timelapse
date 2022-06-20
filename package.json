@@ -1,0 +1,23 @@
+{
+  "name": "uwb-cam-timelapse",
+  "version": "1.0.0",
+  "description": "Twitter bot that posts timelapses of campus daily",
+  "scripts": {
+    "capture": "node capture.js",
+    "post": "node post-tweet.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NeonWizard/uwb-cam-timelapse.git"
+  },
+  "author": "Spooky <averagewizard13@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/NeonWizard/uwb-cam-timelapse/issues"
+  },
+  "homepage": "https://github.com/NeonWizard/uwb-cam-timelapse#readme",
+  "dependencies": {
+    "axios": "^0.27.2"
+  }
+}

@@ -1,0 +1,8 @@
+[Unit]
+Description=Capture UWB timelapse image
+OnFailure=unit-status-telegram@%n.service
+
+[Service]
+Type=oneshot
+ExecStart=npm run capture
+WorkingDirectory=$(pwd)

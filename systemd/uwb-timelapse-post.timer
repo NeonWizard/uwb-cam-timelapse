@@ -1,0 +1,9 @@
+[Unit]
+Description=Generate timelapse GIF and post to Twitter once per day
+
+[Timer]
+Unit=uwb-timelapse-capture.service
+OnCalendar=23:00 PDT
+
+[Install]
+WantedBy=timers.target
