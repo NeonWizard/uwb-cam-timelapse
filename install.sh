@@ -16,9 +16,6 @@ fi
 eval "echo -e \"`<systemd/uwb-timelapse-post.service`\"" > /etc/systemd/system/uwb-timelapse-post.service
 eval "echo -e \"`<systemd/uwb-timelapse-post.timer`\"" > /etc/systemd/system/uwb-timelapse-post.timer
 
-# install cron for clearing image folder at 7am UTC (12AM PST)
-crontab -l | { cat; echo "0 7 * * * rm -rf $(pwd)/images/*"; } | crontab -
-
 # start systemctl timers
 sudo systemctl daemon-reload
 sudo systemctl enable uwb-timelapse-capture.timer
