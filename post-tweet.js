@@ -6,11 +6,14 @@ const fs = require('fs')
 const path = require('path')
 const glob = require('glob')
 const { createCanvas, loadImage } = require('canvas')
+const { TwitterApi } = require('twitter-api-v2')
+require('dotenv').config()
+
+const todays_folder = path.resolve(__dirname, 'images', new Date().toISOString().slice(0, 10))
+const file_path = path.resolve(todays_folder, 'timelapse.gif')
 
 async function generateGIF() {
   const encoder = new GIFEncoder(640, 480)
-  const todays_folder = path.resolve(__dirname, 'images', new Date().toISOString().slice(0, 10))
-  const file_path = path.resolve(todays_folder, 'timelapse.gif')
 
   encoder.createReadStream().pipe(fs.createWriteStream(file_path))
   encoder.start()
@@ -40,8 +43,23 @@ async function generateGIF() {
   return file_path
 }
 
+async function postTweet() {
+  const client = new TwitterApi({
+    appKey: process.env.API_KEY,
+    appSecret: process.env.API_SECRET_KEY,
+    accessToken: process.env.ACCESS_TOKEN,
+    accessSecret: process.env.ACCESS_TOKEN_SECRET
+  })
+
+  const mediaId = await client.v1.uploadMedia(file_path)
+
+  const { data: createdTweet } = await client.v2.tweet('', { media: {media_ids: [mediaId]}})
+}
+
 (async () => {
-  generateGIF()
+  await generateGIF()
+  await new Promise(r => setTimeout(r, 3000))
+  await postTweet()
 })().catch(e => {
-  console.warn(e)
+  throw e
 })
