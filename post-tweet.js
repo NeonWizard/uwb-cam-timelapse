@@ -7,6 +7,7 @@ const path = require('path')
 const glob = require('glob')
 const { createCanvas, loadImage } = require('canvas')
 const { TwitterApi } = require('twitter-api-v2')
+const compress_images = require('compress-images')
 require('dotenv').config()
 
 const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).replace(/\//g, '-')
@@ -16,6 +17,10 @@ const file_path = path.resolve(todays_folder, 'timelapse.gif')
 async function generateGIF() {
   console.log("Generating GIF...")
   const encoder = new GIFEncoder(640, 480)
+
+  try {
+    fs.unlinkSync("images/timelapse.gif")
+  } catch {}
 
   encoder.createReadStream().pipe(fs.createWriteStream(file_path))
   encoder.start()
@@ -43,6 +48,24 @@ async function generateGIF() {
 
   await fs.promises.chmod(file_path, 0o777)
 
+  console.log("Compressing GIF...")
+  compress_images(
+    file_path,
+    "images/",
+    { compress_force: false, statistic: true, autoupdate: false },
+    false,
+    { jpg: { engine: false, command: false }},
+    { png: { engine: false, command: false }},
+    { svg: { engine: false, command: false }},
+    {
+      gif: {
+        engine: "gifsicle",
+        command: ["--optimize", "--lossy"],
+      },
+    },
+    () => {}
+  )
+
   console.log("finished.")
   return file_path
 }
@@ -57,7 +80,7 @@ async function postTweet() {
   })
 
   try {
-    const mediaId = await client.v1.uploadMedia(file_path)
+    const mediaId = await client.v1.uploadMedia("images/timelapse.gif")
     const { data: createdTweet } = await client.v2.tweet('', { media: {media_ids: [mediaId]}})
     console.log("finished.")
   } catch (e) {
