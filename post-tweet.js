@@ -56,11 +56,14 @@ async function postTweet() {
     accessSecret: process.env.ACCESS_TOKEN_SECRET
   })
 
-  const mediaId = await client.v1.uploadMedia(file_path)
-
-  const { data: createdTweet } = await client.v2.tweet('', { media: {media_ids: [mediaId]}})
-
-  console.log("finished.")
+  try {
+    const mediaId = await client.v1.uploadMedia(file_path)
+    const { data: createdTweet } = await client.v2.tweet('', { media: {media_ids: [mediaId]}})
+    console.log("finished.")
+  } catch (e) {
+    console.warn("Did not post tweet successfully. Error:")
+    console.warn(e)
+  }
 }
 
 (async () => {
