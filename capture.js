@@ -25,7 +25,7 @@ async function downloadImage () {
   response.data.pipe(writer)
 
   return new Promise((resolve, reject) => {
-    writer.on('finish', resolve)
+    writer.on('finish', () => fs.chmod(file_path, 0o777, resolve))
     writer.on('error', reject)
   })
 }

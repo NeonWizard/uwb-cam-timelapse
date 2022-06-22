@@ -14,6 +14,7 @@ const todays_folder = path.resolve(__dirname, 'images', today)
 const file_path = path.resolve(todays_folder, 'timelapse.gif')
 
 async function generateGIF() {
+  console.log("Generating GIF...")
   const encoder = new GIFEncoder(640, 480)
 
   encoder.createReadStream().pipe(fs.createWriteStream(file_path))
@@ -38,13 +39,16 @@ async function generateGIF() {
     encoder.addFrame(ctx)
   }
 
-  console.log('FIN!')
   encoder.finish()
 
+  fs.chmod(file_path, 0o777, ()=>{})
+
+  console.log("finished.")
   return file_path
 }
 
 async function postTweet() {
+  console.log("Posting tweet...")
   const client = new TwitterApi({
     appKey: process.env.API_KEY,
     appSecret: process.env.API_SECRET_KEY,
@@ -55,6 +59,8 @@ async function postTweet() {
   const mediaId = await client.v1.uploadMedia(file_path)
 
   const { data: createdTweet } = await client.v2.tweet('', { media: {media_ids: [mediaId]}})
+
+  console.log("finished.")
 }
 
 (async () => {
