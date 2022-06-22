@@ -8,11 +8,12 @@ const axios = require('axios')
 async function downloadImage () {
   console.log("SAY CHEESE!")
   const url = 'http://69.91.192.220/netcam.jpg'
-  const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).replaceAll('/', '-')
+  const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).replace(/\//g, '-')
   const todays_folder = path.resolve(__dirname, 'images', today)
   const file_path = path.resolve(todays_folder, `${Date.now()}.jpg`)
   if (!fs.existsSync(todays_folder)) {
-    fs.mkdirSync(todays_folder, { recursive: true })
+    fs.mkdirSync(todays_folder, { recursive: true, mode: 0o777 })
+    await fs.promises.chmod(todays_folder, 0o777)
   }
   const writer = fs.createWriteStream(file_path)
 

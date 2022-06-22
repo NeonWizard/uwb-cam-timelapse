@@ -9,7 +9,7 @@ const { createCanvas, loadImage } = require('canvas')
 const { TwitterApi } = require('twitter-api-v2')
 require('dotenv').config()
 
-const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).replaceAll('/', '-')
+const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).replace(/\//g, '-')
 const todays_folder = path.resolve(__dirname, 'images', today)
 const file_path = path.resolve(todays_folder, 'timelapse.gif')
 
@@ -41,7 +41,7 @@ async function generateGIF() {
 
   encoder.finish()
 
-  fs.chmod(file_path, 0o777, ()=>{})
+  await fs.promises.chmod(file_path, 0o777)
 
   console.log("finished.")
   return file_path
