@@ -9,7 +9,7 @@ const { createCanvas, loadImage } = require('canvas')
 const { TwitterApi } = require('twitter-api-v2')
 require('dotenv').config()
 
-const today = new Date().toLocaleDateString('en-US', { timeZone: 'US/Pacific' }).replaceAll('/', '-')
+const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).replaceAll('/', '-')
 const todays_folder = path.resolve(__dirname, 'images', today)
 const file_path = path.resolve(todays_folder, 'timelapse.gif')
 
