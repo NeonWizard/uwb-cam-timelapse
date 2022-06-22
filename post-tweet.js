@@ -7,7 +7,8 @@ const path = require('path')
 const glob = require('glob')
 const { createCanvas, loadImage } = require('canvas')
 const { TwitterApi } = require('twitter-api-v2')
-const compress_images = require('compress-images')
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 require('dotenv').config()
 
 const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).replace(/\//g, '-')
@@ -49,22 +50,7 @@ async function generateGIF() {
   await fs.promises.chmod(file_path, 0o777)
 
   console.log("Compressing GIF...")
-  compress_images(
-    file_path,
-    "images/",
-    { compress_force: false, statistic: true, autoupdate: false },
-    false,
-    { jpg: { engine: false, command: false }},
-    { png: { engine: false, command: false }},
-    { svg: { engine: false, command: false }},
-    {
-      gif: {
-        engine: "gifsicle",
-        command: ["--optimize", "--lossy"],
-      },
-    },
-    () => {}
-  )
+  await exec(`gifsicle --colors 256 --lossy --optimize -i ${file_path} >images/timelapse.gif`)
 
   console.log("finished.")
   return file_path

@@ -18,6 +18,9 @@ Run the following commands:
 # install NPM packages
 npm install
 
+# install gifsicle
+apt install gifsicle
+
 # install cron for clearing image folder at 7am UTC (12AM PST)
 crontab -l | { cat; echo "0 7 * * * rm -rf $(pwd)/images/*"; } | crontab -
 

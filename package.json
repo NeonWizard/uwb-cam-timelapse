@@ -20,10 +20,8 @@
   "dependencies": {
     "axios": "^0.27.2",
     "canvas": "^2.9.1",
-    "compress-images": "^2.0.5",
     "dotenv": "^16.0.1",
     "gifencoder": "^2.0.1",
-    "gifsicle": "^5.2.1",
     "glob": "^8.0.3",
     "twitter-api-v2": "^1.12.2"
   }
