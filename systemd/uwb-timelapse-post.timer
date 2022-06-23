@@ -2,7 +2,7 @@
 Description=Generate timelapse GIF and post to Twitter once per day
 
 [Timer]
-Unit=uwb-timelapse-capture.service
+Unit=uwb-timelapse-post.service
 OnCalendar=23:00 America/Los_Angeles
 
 [Install]
