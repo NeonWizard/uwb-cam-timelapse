@@ -27,11 +27,11 @@ async function generateGIF() {
   encoder.start()
   encoder.setRepeat(0)
   encoder.setQuality(20)
-  // every 5 minutes for 19 hours = 228 frames
-  // 30 fps = 33.33ms
-  // 228 * 0.0333 = 7.5 seconds
+  // every 8 minutes for 19 hours = 152 frames
+  // 24 fps = 41.66ms
+  // 152 * 0.04166 = 6.3 seconds
 
-  encoder.setDelay(33)
+  encoder.setDelay(41.66)
 
   const canvas = createCanvas(640, 480)
   const ctx = canvas.getContext('2d')
