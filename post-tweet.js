@@ -15,13 +15,15 @@ const today = new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_An
 const todays_folder = path.resolve(__dirname, 'images', today)
 const file_path = path.resolve(todays_folder, 'timelapse.gif')
 
+// Compiles GIF in folder for the day, then compresses to images/timelapse.gif
+// After compilation and compression, attempts posting to Twitter
 async function generateGIF() {
   console.log("Generating GIF...")
   const encoder = new GIFEncoder(640, 480)
 
   try {
     fs.unlinkSync("images/timelapse.gif")
-  } catch {}
+  } catch { }
 
   encoder.createReadStream().pipe(fs.createWriteStream(file_path))
   encoder.start()
@@ -50,7 +52,7 @@ async function generateGIF() {
   await fs.promises.chmod(file_path, 0o777)
 
   console.log("Compressing GIF...")
-  await exec(`gifsicle --colors 256 --lossy --optimize -i ${file_path} >images/timelapse.gif`)
+  await exec(`gifsicle --colors 250 --lossy=50 -O3 -i ${file_path} >images/timelapse.gif`)
 
   console.log("finished.")
   return file_path
@@ -67,7 +69,7 @@ async function postTweet() {
 
   try {
     const mediaId = await client.v1.uploadMedia("images/timelapse.gif")
-    const { data: createdTweet } = await client.v2.tweet('', { media: {media_ids: [mediaId]}})
+    const { data: createdTweet } = await client.v2.tweet('', { media: { media_ids: [mediaId] } })
     console.log("finished.")
   } catch (e) {
     console.warn("Did not post tweet successfully. Error:")
